@@ -20,7 +20,7 @@ from datetime import datetime
 
 class POTC_Analysis(object):
     """
-        filter_type:
+        threshold_type:
             True = System POTC Value
             False = System Reliability Value
 
@@ -38,137 +38,72 @@ class POTC_Analysis(object):
 
         self.main_read_func()
 
-        self.hazard_rate = 5.07e-04
-        self.p_0_value = 200
-        self.speed_value = 4.32
+        self.robot_count = 3
+        self.initial_configuration_dict = dict()
         self.load_control = True
-        self.filter_type = True
-        self.filter_value = 0.5
+        self.threshold_type = True
+        self.threshold_value = 0.5
         self.route_count = 0
-
-
 
 # ------------------------------------------------------------------------------------------------
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(950, 700)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
         MainWindow.setSizePolicy(sizePolicy)
-        MainWindow.setMinimumSize(QtCore.QSize(800, 600))
-        MainWindow.setMaximumSize(QtCore.QSize(800, 600))
+        MainWindow.setMinimumSize(QtCore.QSize(950, 700))
+        MainWindow.setMaximumSize(QtCore.QSize(950, 700))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.groupBox_selection_analysis = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox_selection_analysis.setGeometry(QtCore.QRect(20, 20, 500, 441))
+        self.groupBox_selection_analysis.setGeometry(QtCore.QRect(20, 20, 570, 330))
         font = QtGui.QFont()
         font.setPointSize(15)
         self.groupBox_selection_analysis.setFont(font)
         self.groupBox_selection_analysis.setObjectName("groupBox_selection_analysis")
-        self.comboBox_load_data = QtWidgets.QComboBox(self.groupBox_selection_analysis)
-        self.comboBox_load_data.setGeometry(QtCore.QRect(275, 150, 150, 35))
+        self.comboBox_select_threshold_type = QtWidgets.QComboBox(self.groupBox_selection_analysis)
+        self.comboBox_select_threshold_type.setGeometry(QtCore.QRect(275, 150, 150, 35))
         font = QtGui.QFont()
         font.setPointSize(15)
-        self.comboBox_load_data.setFont(font)
-        self.comboBox_load_data.setObjectName("comboBox_load_data")
-        self.label = QtWidgets.QLabel(self.groupBox_selection_analysis)
-        self.label.setGeometry(QtCore.QRect(0, 50, 250, 35))
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        self.label.setFont(font)
-        self.label.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label.setObjectName("label")
-        self.label_2 = QtWidgets.QLabel(self.groupBox_selection_analysis)
-        self.label_2.setGeometry(QtCore.QRect(0, 100, 250, 35))
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        self.label_2.setFont(font)
-        self.label_2.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label_2.setObjectName("label_2")
-        self.label_3 = QtWidgets.QLabel(self.groupBox_selection_analysis)
-        self.label_3.setGeometry(QtCore.QRect(0, 150, 250, 35))
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        self.label_3.setFont(font)
-        self.label_3.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label_3.setObjectName("label_3")
-        self.label_4 = QtWidgets.QLabel(self.groupBox_selection_analysis)
-        self.label_4.setGeometry(QtCore.QRect(0, 200, 250, 35))
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        self.label_4.setFont(font)
-        self.label_4.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label_4.setObjectName("label_4")
-        self.label_6 = QtWidgets.QLabel(self.groupBox_selection_analysis)
-        self.label_6.setGeometry(QtCore.QRect(400, 100, 71, 35))
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        self.label_6.setFont(font)
-        self.label_6.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
-        self.label_6.setObjectName("label_6")
-        self.doubleSpinBox_load_capacity_value = QtWidgets.QDoubleSpinBox(self.groupBox_selection_analysis)
-        self.doubleSpinBox_load_capacity_value.setGeometry(QtCore.QRect(275, 200, 100, 35))
-        self.doubleSpinBox_load_capacity_value.setDecimals(1)
-        self.doubleSpinBox_load_capacity_value.setMaximum(100000.0)
-        self.doubleSpinBox_load_capacity_value.setSingleStep(0.5)
-        self.doubleSpinBox_load_capacity_value.setObjectName("doubleSpinBox_load_capacity_value")
-        self.doubleSpinBox_robot_speed_value = QtWidgets.QDoubleSpinBox(self.groupBox_selection_analysis)
-        self.doubleSpinBox_robot_speed_value.setGeometry(QtCore.QRect(275, 100, 100, 35))
-        self.doubleSpinBox_robot_speed_value.setDecimals(3)
-        self.doubleSpinBox_robot_speed_value.setMaximum(100.0)
-        self.doubleSpinBox_robot_speed_value.setObjectName("doubleSpinBox_robot_speed_value")
-        self.label_7 = QtWidgets.QLabel(self.groupBox_selection_analysis)
-        self.label_7.setGeometry(QtCore.QRect(400, 200, 71, 35))
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        self.label_7.setFont(font)
-        self.label_7.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
-        self.label_7.setObjectName("label_7")
-        self.comboBox_filter_type = QtWidgets.QComboBox(self.groupBox_selection_analysis)
-        self.comboBox_filter_type.setGeometry(QtCore.QRect(275, 250, 150, 35))
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        self.comboBox_filter_type.setFont(font)
-        self.comboBox_filter_type.setObjectName("comboBox_filter_type")
+        self.comboBox_select_threshold_type.setFont(font)
+        self.comboBox_select_threshold_type.setObjectName("comboBox_select_threshold_type")
         self.label_5 = QtWidgets.QLabel(self.groupBox_selection_analysis)
-        self.label_5.setGeometry(QtCore.QRect(0, 250, 250, 35))
+        self.label_5.setGeometry(QtCore.QRect(0, 150, 250, 35))
         font = QtGui.QFont()
         font.setPointSize(15)
         self.label_5.setFont(font)
         self.label_5.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_5.setObjectName("label_5")
-        self.doubleSpinBox_filter_value = QtWidgets.QDoubleSpinBox(self.groupBox_selection_analysis)
-        self.doubleSpinBox_filter_value.setGeometry(QtCore.QRect(275, 300, 100, 35))
-        self.doubleSpinBox_filter_value.setDecimals(5)
-        self.doubleSpinBox_filter_value.setMaximum(1.0)
-        self.doubleSpinBox_filter_value.setSingleStep(0.05)
-        self.doubleSpinBox_filter_value.setProperty("value", 0.5)
-        self.doubleSpinBox_filter_value.setObjectName("doubleSpinBox_filter_value")
+        self.doubleSpinBox_threshold_value = QtWidgets.QDoubleSpinBox(self.groupBox_selection_analysis)
+        self.doubleSpinBox_threshold_value.setGeometry(QtCore.QRect(275, 200, 100, 35))
+        self.doubleSpinBox_threshold_value.setDecimals(5)
+        self.doubleSpinBox_threshold_value.setMaximum(1.0)
+        self.doubleSpinBox_threshold_value.setSingleStep(0.05)
+        self.doubleSpinBox_threshold_value.setProperty("value", 0.5)
+        self.doubleSpinBox_threshold_value.setObjectName("doubleSpinBox_threshold_value")
         self.label_8 = QtWidgets.QLabel(self.groupBox_selection_analysis)
-        self.label_8.setGeometry(QtCore.QRect(0, 300, 250, 35))
+        self.label_8.setGeometry(QtCore.QRect(0, 200, 250, 35))
         font = QtGui.QFont()
         font.setPointSize(15)
         self.label_8.setFont(font)
         self.label_8.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_8.setObjectName("label_8")
         self.label_9 = QtWidgets.QLabel(self.groupBox_selection_analysis)
-        self.label_9.setGeometry(QtCore.QRect(0, 350, 250, 35))
+        self.label_9.setGeometry(QtCore.QRect(0, 250, 250, 35))
         font = QtGui.QFont()
         font.setPointSize(15)
         self.label_9.setFont(font)
         self.label_9.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_9.setObjectName("label_9")
         self.spinBox_route_count = QtWidgets.QSpinBox(self.groupBox_selection_analysis)
-        self.spinBox_route_count.setGeometry(QtCore.QRect(275, 350, 100, 35))
+        self.spinBox_route_count.setGeometry(QtCore.QRect(275, 250, 100, 35))
         self.spinBox_route_count.setMaximum(100000)
         self.spinBox_route_count.setObjectName("spinBox_route_count")
-        self.lineEdit_hazard_rate_value = QtWidgets.QLineEdit(self.groupBox_selection_analysis)
-        self.lineEdit_hazard_rate_value.setGeometry(QtCore.QRect(275, 50, 200, 35))
-        self.lineEdit_hazard_rate_value.setObjectName("lineEdit_hazard_rate_value")
         self.label_10 = QtWidgets.QLabel(self.groupBox_selection_analysis)
-        self.label_10.setGeometry(QtCore.QRect(120, 390, 271, 41))
+        self.label_10.setGeometry(QtCore.QRect(120, 290, 271, 41))
         font = QtGui.QFont()
         font.setPointSize(8)
         self.label_10.setFont(font)
@@ -177,25 +112,128 @@ class POTC_Analysis(object):
         self.label_10.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_10.setWordWrap(True)
         self.label_10.setObjectName("label_10")
+        self.label_3 = QtWidgets.QLabel(self.groupBox_selection_analysis)
+        self.label_3.setGeometry(QtCore.QRect(0, 100, 250, 35))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_3.setFont(font)
+        self.label_3.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_3.setObjectName("label_3")
+        self.comboBox_load_data = QtWidgets.QComboBox(self.groupBox_selection_analysis)
+        self.comboBox_load_data.setGeometry(QtCore.QRect(275, 100, 150, 35))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.comboBox_load_data.setFont(font)
+        self.comboBox_load_data.setObjectName("comboBox_load_data")
+        self.spinBox_robot_route_count = QtWidgets.QSpinBox(self.groupBox_selection_analysis)
+        self.spinBox_robot_route_count.setGeometry(QtCore.QRect(275, 50, 100, 35))
+        self.spinBox_robot_route_count.setMinimum(1)
+        self.spinBox_robot_route_count.setMaximum(1000)
+        self.spinBox_robot_route_count.setObjectName("spinBox_robot_route_count")
+        self.pushButton_set_robot_count = QtWidgets.QPushButton(self.groupBox_selection_analysis)
+        self.pushButton_set_robot_count.setGeometry(QtCore.QRect(460, 40, 100, 50))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.pushButton_set_robot_count.setFont(font)
+        self.pushButton_set_robot_count.setObjectName("pushButton_set_robot_count")
+        self.label_11 = QtWidgets.QLabel(self.groupBox_selection_analysis)
+        self.label_11.setGeometry(QtCore.QRect(0, 50, 250, 35))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_11.setFont(font)
+        self.label_11.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_11.setObjectName("label_11")
         self.plainTextEdit_result_view = QtWidgets.QPlainTextEdit(self.centralwidget)
-        self.plainTextEdit_result_view.setGeometry(QtCore.QRect(550, 45, 230, 350))
+        self.plainTextEdit_result_view.setGeometry(QtCore.QRect(620, 35, 300, 500))
         self.plainTextEdit_result_view.setReadOnly(True)
         self.plainTextEdit_result_view.setPlainText("")
         self.plainTextEdit_result_view.setObjectName("plainTextEdit_result_view")
         self.pushButton_start_analysis = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_start_analysis.setGeometry(QtCore.QRect(575, 430, 150, 75))
+        self.pushButton_start_analysis.setGeometry(QtCore.QRect(690, 550, 150, 75))
         font = QtGui.QFont()
         font.setPointSize(15)
         self.pushButton_start_analysis.setFont(font)
         self.pushButton_start_analysis.setObjectName("pushButton_start_analysis")
+        self.groupBox_robot_configuration = QtWidgets.QGroupBox(self.centralwidget)
+        self.groupBox_robot_configuration.setEnabled(False)
+        self.groupBox_robot_configuration.setGeometry(QtCore.QRect(20, 400, 570, 271))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.groupBox_robot_configuration.setFont(font)
+        self.groupBox_robot_configuration.setObjectName("groupBox_robot_configuration")
+        self.label_12 = QtWidgets.QLabel(self.groupBox_robot_configuration)
+        self.label_12.setGeometry(QtCore.QRect(0, 30, 250, 35))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_12.setFont(font)
+        self.label_12.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_12.setObjectName("label_12")
+        self.comboBox_select_robot = QtWidgets.QComboBox(self.groupBox_robot_configuration)
+        self.comboBox_select_robot.setGeometry(QtCore.QRect(275, 30, 150, 35))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.comboBox_select_robot.setFont(font)
+        self.comboBox_select_robot.setObjectName("comboBox_select_robot")
+        self.label_7 = QtWidgets.QLabel(self.groupBox_robot_configuration)
+        self.label_7.setGeometry(QtCore.QRect(400, 230, 71, 35))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_7.setFont(font)
+        self.label_7.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.label_7.setObjectName("label_7")
+        self.label_6 = QtWidgets.QLabel(self.groupBox_robot_configuration)
+        self.label_6.setGeometry(QtCore.QRect(400, 180, 71, 35))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_6.setFont(font)
+        self.label_6.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.label_6.setObjectName("label_6")
+        self.doubleSpinBox_nominal_capacity_value = QtWidgets.QDoubleSpinBox(self.groupBox_robot_configuration)
+        self.doubleSpinBox_nominal_capacity_value.setGeometry(QtCore.QRect(275, 230, 100, 35))
+        self.doubleSpinBox_nominal_capacity_value.setDecimals(1)
+        self.doubleSpinBox_nominal_capacity_value.setMaximum(100000.0)
+        self.doubleSpinBox_nominal_capacity_value.setSingleStep(0.5)
+        self.doubleSpinBox_nominal_capacity_value.setObjectName("doubleSpinBox_nominal_capacity_value")
+        self.doubleSpinBox_robot_speed_value = QtWidgets.QDoubleSpinBox(self.groupBox_robot_configuration)
+        self.doubleSpinBox_robot_speed_value.setGeometry(QtCore.QRect(275, 180, 100, 35))
+        self.doubleSpinBox_robot_speed_value.setDecimals(3)
+        self.doubleSpinBox_robot_speed_value.setMaximum(100.0)
+        self.doubleSpinBox_robot_speed_value.setObjectName("doubleSpinBox_robot_speed_value")
+        self.label_4 = QtWidgets.QLabel(self.groupBox_robot_configuration)
+        self.label_4.setGeometry(QtCore.QRect(0, 230, 250, 35))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_4.setFont(font)
+        self.label_4.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_4.setObjectName("label_4")
+        self.lineEdit_hazard_rate_value = QtWidgets.QLineEdit(self.groupBox_robot_configuration)
+        self.lineEdit_hazard_rate_value.setGeometry(QtCore.QRect(275, 80, 200, 35))
+        self.lineEdit_hazard_rate_value.setObjectName("lineEdit_hazard_rate_value")
+        self.label = QtWidgets.QLabel(self.groupBox_robot_configuration)
+        self.label.setGeometry(QtCore.QRect(0, 80, 250, 35))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label.setFont(font)
+        self.label.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label.setObjectName("label")
+        self.label_2 = QtWidgets.QLabel(self.groupBox_robot_configuration)
+        self.label_2.setGeometry(QtCore.QRect(0, 180, 250, 35))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_2.setFont(font)
+        self.label_2.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_2.setObjectName("label_2")
+        self.lineEdit_start_reliability_value = QtWidgets.QLineEdit(self.groupBox_robot_configuration)
+        self.lineEdit_start_reliability_value.setGeometry(QtCore.QRect(275, 130, 200, 35))
+        self.lineEdit_start_reliability_value.setObjectName("lineEdit_start_reliability_value")
+        self.label_13 = QtWidgets.QLabel(self.groupBox_robot_configuration)
+        self.label_13.setGeometry(QtCore.QRect(0, 130, 250, 35))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_13.setFont(font)
+        self.label_13.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_13.setObjectName("label_13")
         MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 25))
-        self.menubar.setObjectName("menubar")
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
 
     # ---------------------------------------------------------------------------------------------------------------
 
@@ -210,17 +248,22 @@ class POTC_Analysis(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Prognostic Aware Multi Robot Route Planning"))
         self.groupBox_selection_analysis.setTitle(_translate("MainWindow", "Analysis Options"))
-        self.label.setText(_translate("MainWindow", "Hazard Rate Value"))
-        self.label_2.setText(_translate("MainWindow", "Robot Speed Value"))
-        self.label_3.setText(_translate("MainWindow", "Use Load Data"))
-        self.label_4.setText(_translate("MainWindow", "Nominal Capacity Value"))
-        self.label_6.setText(_translate("MainWindow", "km / h"))
-        self.label_7.setText(_translate("MainWindow", "kg"))
         self.label_5.setText(_translate("MainWindow", "Select Threshold Type"))
         self.label_8.setText(_translate("MainWindow", "Threshold Value"))
         self.label_9.setText(_translate("MainWindow", "Route Count"))
         self.label_10.setText(_translate("MainWindow", "Note: It refers to the number of routes to be analyzed. If the value is 0, it refers to the maximum value."))
+        self.label_3.setText(_translate("MainWindow", "Use Load Data"))
+        self.pushButton_set_robot_count.setText(_translate("MainWindow", "Set Count"))
+        self.label_11.setText(_translate("MainWindow", "Set Robot Count"))
         self.pushButton_start_analysis.setText(_translate("MainWindow", "Start Analysis"))
+        self.groupBox_robot_configuration.setTitle(_translate("MainWindow", "Robot Configuration"))
+        self.label_12.setText(_translate("MainWindow", "Select Robot"))
+        self.label_7.setText(_translate("MainWindow", "kg"))
+        self.label_6.setText(_translate("MainWindow", "km / h"))
+        self.label_4.setText(_translate("MainWindow", "Nominal Capacity Value"))
+        self.label.setText(_translate("MainWindow", "Hazard Rate Value"))
+        self.label_2.setText(_translate("MainWindow", "Robot Speed Value"))
+        self.label_13.setText(_translate("MainWindow", "Start Reliability Value"))
 
 # ------------------------------------------------------------------------------------------------
 
@@ -231,35 +274,64 @@ class POTC_Analysis(object):
 
 
     def gui_default_parameters_func(self):
-        self.lineEdit_hazard_rate_value.setText("5.07e-04")
-        self.doubleSpinBox_robot_speed_value.setValue(4.32)
+        #self.lineEdit_hazard_rate_value.setText("5.07e-04")
+        #self.doubleSpinBox_robot_speed_value.setValue(4.32)
 
         load_data_list = list(["True", "False"])
         self.comboBox_load_data.addItems(load_data_list)
 
-        self.doubleSpinBox_load_capacity_value.setValue(200.0)
+        #self.doubleSpinBox_nominal_capacity_value.setValue(200.0)
 
         filter_list = list(["POTC Value", "Reliability Value"])
-        self.comboBox_filter_type.addItems(filter_list)
+        self.comboBox_select_threshold_type.addItems(filter_list)
 
-        self.doubleSpinBox_filter_value.setValue(0.5)
+        self.doubleSpinBox_threshold_value.setValue(0.5)
         self.spinBox_route_count.setValue(0)
+
+        self.comboBox_select_robot.addItem("None")
+
+        self.pushButton_start_analysis.setEnabled(False)
+
 
 
     def potc_gui_events_func(self):
+        self.pushButton_set_robot_count.clicked.connect(self.click_set_robot_count_button_func)
         self.pushButton_start_analysis.clicked.connect(self.click_start_analysis_button_func)
         self.lineEdit_hazard_rate_value.textChanged.connect(self.event_lineEdit_hazard_rate_value_func)
         self.doubleSpinBox_robot_speed_value.valueChanged.connect(self.event_doubleSpinBox_robot_speed_value_func)
         self.comboBox_load_data.currentIndexChanged.connect(self.event_comboBox_load_data_func)
-        self.doubleSpinBox_load_capacity_value.valueChanged.connect(self.event_doubleSpinBox_load_capacity_value_func)
-        self.comboBox_filter_type.currentIndexChanged.connect(self.event_comboBox_filter_type_func)
-        self.doubleSpinBox_filter_value.valueChanged.connect(self.event_doubleSpinBox_filter_value_func)
+        self.doubleSpinBox_nominal_capacity_value.valueChanged.connect(self.event_doubleSpinBox_nominal_capacity_value_func)
+        self.comboBox_select_threshold_type.currentIndexChanged.connect(self.event_comboBox_select_threshold_type_func)
+        self.doubleSpinBox_threshold_value.valueChanged.connect(self.event_doubleSpinBox_threshold_value_func)
         self.spinBox_route_count.valueChanged.connect(self.event_spinBox_route_count_func)
+        self.comboBox_select_robot.currentIndexChanged.connect(self.event_comboBox_select_robot_func)
+        self.lineEdit_start_reliability_value.textChanged.connect(self.event_lineEdit_start_reliability_value_func)
+
+    def click_set_robot_count_button_func(self):
+        self.robot_count = self.spinBox_robot_route_count.value()
+
+        if self.robot_count > 3:
+            self.robot_count = 3
+
+        self.initial_configuration_dicts_func(self.robot_count)
+        print(self.initial_configuration_dict)
+        robot_list = list()
+
+        for item in range(len(list(self.initial_configuration_dict.keys()))):
+            robot_list.append(str("Robot " + str(item + 1)))
+
+        self.comboBox_select_robot.addItems(robot_list)
+
+        self.label_11.setEnabled(False)
+        self.spinBox_robot_route_count.setEnabled(False)
+        self.pushButton_set_robot_count.setEnabled(False)
+        self.groupBox_robot_configuration.setEnabled(True)
+        self.pushButton_start_analysis.setEnabled(True)
 
 
     def click_start_analysis_button_func(self):
         try:
-            potc_class = CalculatePOTC(self.hazard_rate, self.robot_main_dict, self.p_0_value, self.speed_value, self.distance_list, self.load_control, self.filter_type, self.filter_value, self.route_count)
+            potc_class = CalculatePOTC(self.robot_count, self.robot_main_dict, self.initial_configuration_dict, self.distance_list, self.load_control, self.threshold_type, self.threshold_value, self.route_count)
             #potc_class.calculate_main_potc_func()
 
             calculate_thread = threading.Thread(target=potc_class.calculate_main_potc_func)
@@ -270,9 +342,9 @@ class POTC_Analysis(object):
             dt_string = now.strftime("%Y_%m_%d_-_%H_%M_%S")
 
             if self.load_control:
-                file_name = str("potc_analysis_use_load_data_" + str(dt_string))
+                file_name = str("potc_analysis_loaded_" + str(dt_string))
             else:
-                file_name = str("potc_analysis_" + str(dt_string))
+                file_name = str("potc_analysis_unloaded_" + str(dt_string))
 
             self.csv_write(potc_class.write_data_list, file_name)
 
@@ -289,10 +361,14 @@ class POTC_Analysis(object):
     
     def event_lineEdit_hazard_rate_value_func(self):
         try:
-            get_value = self.lineEdit_hazard_rate_value.text()
+            selected_cb_robot = str(self.comboBox_select_robot.currentText())
+            selected_robot = selected_cb_robot.split("Robot ")[-1]
 
-            if get_value != "":
-                self.hazard_rate = float(get_value)
+            if selected_cb_robot != "None" and selected_cb_robot != "":
+                get_value = self.lineEdit_hazard_rate_value.text()
+
+                if get_value != "":
+                    self.initial_configuration_dict[str("robot_" + str(selected_robot))]["Hazard Rate"] = float(get_value)
 
         except Exception as err:
             print("\n\nError: event_lineEdit_hazard_rate_value_func")
@@ -301,9 +377,13 @@ class POTC_Analysis(object):
 
     def event_doubleSpinBox_robot_speed_value_func(self):
         try:
-            get_value = self.doubleSpinBox_robot_speed_value.value()
+            selected_cb_robot = str(self.comboBox_select_robot.currentText())
+            selected_robot = selected_cb_robot.split("Robot ")[-1]
 
-            self.speed_value = float(get_value)
+            if selected_cb_robot != "None" and selected_cb_robot != "":
+                get_value = self.doubleSpinBox_robot_speed_value.value()
+
+                self.initial_configuration_dict[str("robot_" + str(selected_robot))]["Speed"] = float(get_value)
 
         except Exception as err:
             print("\n\nError: event_doubleSpinBox_robot_speed_value_func")
@@ -316,51 +396,53 @@ class POTC_Analysis(object):
 
             if get_value == "True":
                 self.load_control = True
-                print("event_comboBox_load_data_func -> True")
 
             else:
                 self.load_control = False
-                print("event_comboBox_load_data_func -> False")
 
         except Exception as err:
             print("\n\nError: comboBox_load_data")
             print(err)
 
 
-    def event_doubleSpinBox_load_capacity_value_func(self):
+    def event_doubleSpinBox_nominal_capacity_value_func(self):
         try:
-            get_value = self.doubleSpinBox_load_capacity_value.value()
+            selected_cb_robot = str(self.comboBox_select_robot.currentText())
+            selected_robot = selected_cb_robot.split("Robot ")[-1]
 
-            self.p_0_value = float(get_value)
+            if selected_cb_robot != "None" and selected_cb_robot != "":
+                get_value = self.doubleSpinBox_nominal_capacity_value.value()
+
+                self.initial_configuration_dict[str("robot_" + str(selected_robot))]["Nominal Capacity"] = float(get_value)
 
         except Exception as err:
-            print("\n\nError: event_doubleSpinBox_load_capacity_value_func")
+            print("\n\nError: event_doubleSpinBox_nominal_capacity_value_func")
             print(err)
 
 
-    def event_comboBox_filter_type_func(self):
+    def event_comboBox_select_threshold_type_func(self):
         try:
-            get_value = str(self.comboBox_filter_type.currentText())
+            get_value = str(self.comboBox_select_threshold_type.currentText())
 
             if get_value == "POTC Value":
-                self.filter_type = True
+                self.threshold_type = True
 
             elif get_value == "Reliability Value":
-                self.filter_type = False
+                self.threshold_type = False
 
         except Exception as err:
-            print("\n\nError: event_comboBox_filter_type_func")
+            print("\n\nError: event_comboBox_select_threshold_type_func")
             print(err)
 
 
-    def event_doubleSpinBox_filter_value_func(self):
+    def event_doubleSpinBox_threshold_value_func(self):
         try:
-            get_value = self.doubleSpinBox_filter_value.value()
+            get_value = self.doubleSpinBox_threshold_value.value()
 
-            self.filter_value = float(get_value)
+            self.threshold_value = float(get_value)
 
         except Exception as err:
-            print("\n\nError: event_doubleSpinBox_filter_value_func")
+            print("\n\nError: event_doubleSpinBox_threshold_value_func")
             print(err)
 
 
@@ -368,12 +450,55 @@ class POTC_Analysis(object):
         try:
             get_value = self.spinBox_route_count.value()
 
-            self.currentIndexChanged = int(get_value)
+            self.route_count = int(get_value)
 
         except Exception as err:
             print("\n\nError: event_spinBox_route_count_func")
             print(err)
 
+
+    def event_comboBox_select_robot_func(self):
+        try:
+            selected_cb_robot = str(self.comboBox_select_robot.currentText())
+
+            if selected_cb_robot != "None" and selected_cb_robot != "":
+                selected_robot = selected_cb_robot.split("Robot ")[-1]
+                
+                self.set_enable_robot_configuration_group_func(True)
+                self.lineEdit_hazard_rate_value.setText(str(self.initial_configuration_dict[str("robot_" + str(selected_robot))]["Hazard Rate"]))
+                self.lineEdit_start_reliability_value.setText(str(self.initial_configuration_dict[str("robot_" + str(selected_robot))]["Reliability"]))
+                self.doubleSpinBox_robot_speed_value.setValue(float(self.initial_configuration_dict[str("robot_" + str(selected_robot))]["Speed"]))
+                self.doubleSpinBox_nominal_capacity_value.setValue(float(self.initial_configuration_dict[str("robot_" + str(selected_robot))]["Nominal Capacity"]))
+
+            else:
+                self.lineEdit_hazard_rate_value.setText("")
+                self.lineEdit_start_reliability_value.setText("")
+                self.doubleSpinBox_robot_speed_value.setValue(0.0)
+                self.doubleSpinBox_nominal_capacity_value.setValue(0.0)
+
+                self.set_enable_robot_configuration_group_func(False)
+
+
+
+        except Exception as err:
+            print("\n\nError: event_comboBox_select_robot_func")
+            print(err)
+
+
+    def event_lineEdit_start_reliability_value_func(self):
+        try:
+            selected_cb_robot = str(self.comboBox_select_robot.currentText())
+            selected_robot = selected_cb_robot.split("Robot ")[-1]
+
+            if selected_cb_robot != "None" and selected_cb_robot != "":
+                get_value = self.lineEdit_start_reliability_value.text()
+
+                if get_value != "":
+                    self.initial_configuration_dict[str("robot_" + str(selected_robot))]["Reliability"] = float(get_value)
+
+        except Exception as err:
+            print("\n\nError: event_lineEdit_start_reliability_value_func")
+            print(err)
 
 
     def set_plain_text_edit_result_view_func(self, set_value):
@@ -408,7 +533,7 @@ class POTC_Analysis(object):
 
 
     def read_route_loads_func(self, robot_no):
-        with open(str(self.current_workspace) + 'potc_analysis/params/1003_routeLoads_energy.csv', 'r') as csvfile:
+        with open(str(self.current_workspace) + 'potc_analysis/params/1003_routeLoads.csv', 'r') as csvfile:
             read_data = csv.reader(csvfile, delimiter=',')
             next(read_data)
 
@@ -425,7 +550,7 @@ class POTC_Analysis(object):
 
 
     def read_route_func(self, robot_no):
-        with open(str(self.current_workspace) + 'potc_analysis/params/1003_routeSet_energy.csv', 'r') as csvfile:
+        with open(str(self.current_workspace) + 'potc_analysis/params/1003_routeSet.csv', 'r') as csvfile:
             read_data = csv.reader(csvfile, delimiter=',')
             next(read_data)
 
@@ -442,7 +567,7 @@ class POTC_Analysis(object):
 
 
     def read_speed_func(self, robot_no):
-        with open(str(self.current_workspace) + 'potc_analysis/params/1003_routeSet_energy.csv', 'r') as csvfile:
+        with open(str(self.current_workspace) + 'potc_analysis/params/1003_routeSet.csv', 'r') as csvfile:
             read_data = csv.reader(csvfile, delimiter=',')
             next(read_data)
 
@@ -482,20 +607,37 @@ class POTC_Analysis(object):
 
 # -------------------------------------------------------------------
 
+    def initial_configuration_dicts_func(self, robot_count):
+        for item in range(robot_count):
+            self.initial_configuration_dict[str("robot_" + str(item + 1))] = {"Hazard Rate": float(5.07e-04), "Reliability": float(1), "Nominal Capacity": float(200), "Speed": float(4.32)}
+
+
+    def set_enable_robot_configuration_group_func(self, status):
+        self.lineEdit_hazard_rate_value.setEnabled(status)
+        self.lineEdit_start_reliability_value.setEnabled(status)
+        self.doubleSpinBox_robot_speed_value.setEnabled(status)
+        self.doubleSpinBox_nominal_capacity_value.setEnabled(status)
+        self.label.setEnabled(status)
+        self.label_13.setEnabled(status)
+        self.label_2.setEnabled(status)
+        self.label_4.setEnabled(status)
+        self.label_6.setEnabled(status)
+        self.label_7.setEnabled(status)
+
+# -------------------------------------------------------------------
+
 class CalculatePOTC:
     """
         km / h
     """
-    def __init__(self, hazard_rate, robot_main_dict, p_0_value, speed_value, distance_list, load_control, filter_type, filter_value, route_count):
-        self.hazard_rate = hazard_rate
+    def __init__(self, robot_count, robot_main_dict, initial_configuration_dict, distance_list, load_control, threshold_type, threshold_value, route_count):
+        self.robot_count = robot_count
+        self.initial_configuration_dict = initial_configuration_dict
         self.robot_main_dict = robot_main_dict
-        self.p_0_value = p_0_value
-        self.speed_value = speed_value
         self.distance_list = distance_list
-        self.robot_count = 3    # robot_count
         self.load_control = load_control
-        self.filter_type = filter_type
-        self.filter_value = filter_value
+        self.threshold_type = threshold_type
+        self.threshold_value = threshold_value
 
         if route_count == 0:
             self.robot_main_dict_count = len(list(self.robot_main_dict["Mesafe"][str("robot_" + str(self.robot_count))].keys()))
@@ -508,8 +650,8 @@ class CalculatePOTC:
         self.selected_route_count_list = list()
 
         self.system_main_dict = dict()
-        self.system_main_dict["0"] = {"POTC": 1, "Reliability": 1, "Secili Rota": 0, "Robot Reliability": [0.8, 0.92, 0.75], "Robot Time": [0, 0, 0], "Robot Distance": [0, 0, 0]}
-
+        self.system_main_dict["0"] = {"POTC": 1, "Reliability": 1, "Secili Rota": 0, "Robot Reliability": list(), "Robot Time": list(), "Robot Distance": list()}
+        self.initial_system_main_dict_func()
 
 
     @classmethod
@@ -545,6 +687,30 @@ class CalculatePOTC:
         """
         return float(math.exp(float(-1) * float(reliability_time) * float(failure_rate)))
 
+    @classmethod
+    def time_convert_function(cls, time_value):
+        seconds = float(time_value)*60*60
+        minutes, seconds = divmod(seconds, 60)
+        hours, minutes = divmod(minutes, 60)
+
+        result = "%02d:%02d:%02d"%(hours,minutes,seconds)
+        return result
+
+
+    def initial_system_main_dict_func(self):
+        robot_reliability_list = list()
+        robot_time_list = list()
+        robot_distance_list = list()
+
+        for item in range(self.robot_count):
+            robot_reliability_list.append(self.initial_configuration_dict[str("robot_" + str(item + 1))]["Reliability"])
+            robot_time_list.append(float(0.0))
+            robot_distance_list.append(float(0.0))
+
+        self.system_main_dict["0"]["Robot Reliability"] = robot_reliability_list
+        self.system_main_dict["0"]["Robot Time"] = robot_time_list
+        self.system_main_dict["0"]["Robot Distance"] = robot_distance_list
+
 
     def set_write_data_list_func(self):
         key_count = len(list(self.system_main_dict.keys()))
@@ -564,15 +730,19 @@ class CalculatePOTC:
         temp_list.append("Robot 2")
         temp_list.append("Robot 3")
         temp_list.append(str(""))
-        temp_list.append("Robot Time ->")
+        temp_list.append("Robot Zaman ->")
         temp_list.append("Robot 1")
         temp_list.append("Robot 2")
         temp_list.append("Robot 3")
         temp_list.append(str(""))
-        temp_list.append("Robot Distance ->")
+        temp_list.append("Robot Mesafe ->")
         temp_list.append("Robot 1")
         temp_list.append("Robot 2")
         temp_list.append("Robot 3")
+        temp_list.append(str(""))
+        temp_list.append("Ortalama Zaman")
+        temp_list.append(str(""))
+        temp_list.append("Ortalama Mesafe")
         temp_list.append(str(""))
         temp_list.append("Rota Secilme Miktari ->")
         temp_list.append("Rota Numarasi")
@@ -583,6 +753,8 @@ class CalculatePOTC:
 
         for item in range(key_count):
             temp_list = list()
+            time_list = list()
+            distance_list = list()
 
             temp_list.append(str(item))
             temp_list.append(str(""))
@@ -604,15 +776,34 @@ class CalculatePOTC:
             temp_list.append(str(""))
 
             temp_list.append(str(""))
-            temp_list.append(self.system_main_dict[str(item)]["Robot Time"][0])
-            temp_list.append(self.system_main_dict[str(item)]["Robot Time"][1])
-            temp_list.append(self.system_main_dict[str(item)]["Robot Time"][2])
+            temp_list.append(self.time_convert_function(self.system_main_dict[str(item)]["Robot Time"][0]))
+            temp_list.append(self.time_convert_function(self.system_main_dict[str(item)]["Robot Time"][1]))
+            temp_list.append(self.time_convert_function(self.system_main_dict[str(item)]["Robot Time"][2]))
             temp_list.append(str(""))
+
+            time_list.append(self.system_main_dict[str(item)]["Robot Time"][0])             # Time Average
+            time_list.append(self.system_main_dict[str(item)]["Robot Time"][1])             # Time Average
+            time_list.append(self.system_main_dict[str(item)]["Robot Time"][2])             # Time Average
+            
 
             temp_list.append(str(""))
             temp_list.append(self.system_main_dict[str(item)]["Robot Distance"][0])
             temp_list.append(self.system_main_dict[str(item)]["Robot Distance"][1])
             temp_list.append(self.system_main_dict[str(item)]["Robot Distance"][2])
+            temp_list.append(str(""))
+
+            distance_list.append(self.system_main_dict[str(item)]["Robot Distance"][0])     # Distance Average
+            distance_list.append(self.system_main_dict[str(item)]["Robot Distance"][1])     # Distance Average
+            distance_list.append(self.system_main_dict[str(item)]["Robot Distance"][2])     # Distance Average
+
+            time_average = self.average_list_func(time_list)
+            temp_list.append(self.time_convert_function(time_average))
+
+            temp_list.append(str(""))
+
+            distance_average = self.average_list_func(distance_list)
+            temp_list.append(distance_average)
+
 
             self.write_data_list.append(temp_list)
 
@@ -630,6 +821,18 @@ class CalculatePOTC:
             self.write_data_list[(i+1)].append(self.selected_route_count_list[i][1])
 
 
+    def average_list_func(self, temp_list):
+        result = 0.0
+
+        for item in temp_list:
+            result += float(item)
+
+        list_count = len(temp_list)
+        average_result = float(result / list_count)
+
+        return average_result
+
+
     def calculate_system_reliability_func(self, robot_reliability_list):
         system_reliability = 1
         for rlblty in robot_reliability_list:
@@ -638,14 +841,15 @@ class CalculatePOTC:
         return system_reliability
 
 
-    def get_mesafe_and_zaman_list_func(self, temp_mesafe_list):
+    def get_mesafe_and_zaman_list_func(self, temp_mesafe_list, robot_cnt):
         list_count = len(temp_mesafe_list)
         mesafe_list = list()
         zaman_list = list()
 
         for count in range(list_count - 1):
             mesafe = float(self.distance_list[int(temp_mesafe_list[count])][int(temp_mesafe_list[count + 1])]) / 1000
-            zaman = self.calculate_time_func(mesafe, self.speed_value)
+            robot_speed_value = float(self.initial_configuration_dict[str("robot_" + str(robot_cnt))]["Speed"])
+            zaman = self.calculate_time_func(mesafe, robot_speed_value)
             mesafe_list.append(mesafe)
             zaman_list.append(zaman)
 
@@ -659,12 +863,15 @@ class CalculatePOTC:
         potc_value = 0
 
         for item_count in range(len(mesafe_list)):
+            selected_robot_hazard_rate = float(self.initial_configuration_dict[str("robot_" + str(robot_cnt))]["Hazard Rate"])
+            selected_robot_nominal_capacity = float(self.initial_configuration_dict[str("robot_" + str(robot_cnt))]["Nominal Capacity"])
+
             if self.load_control:
                 p_value = self.robot_main_dict["Yuk"][str("robot_" + str(robot_cnt))][str(route_cnt)][item_count]
-                hazard_rate = self.failure_rate_calculation_using_operating_load_func(self.hazard_rate, p_value, self.p_0_value)
+                hazard_rate = self.failure_rate_calculation_using_operating_load_func(selected_robot_hazard_rate, p_value, selected_robot_nominal_capacity)
 
             else:
-                hazard_rate = self.hazard_rate
+                hazard_rate = selected_robot_hazard_rate
 
             time_value += zaman_list[item_count]
             distance_value += mesafe_list[item_count]
@@ -688,7 +895,7 @@ class CalculatePOTC:
             mesafe_list = list()
             zaman_list = list()
             temp_mesafe_list = list(self.robot_main_dict["Mesafe"][str("robot_" + str(robot_cnt))][str(route_cnt)])
-            mesafe_list, zaman_list = self.get_mesafe_and_zaman_list_func(temp_mesafe_list)
+            mesafe_list, zaman_list = self.get_mesafe_and_zaman_list_func(temp_mesafe_list, robot_cnt)
 
             potc_value, reliability_value, time_value, distance_value = self.calculate_potc_and_reliability_func(process_count, mesafe_list, zaman_list, route_cnt, robot_cnt)
 
@@ -726,16 +933,16 @@ class CalculatePOTC:
                 distance_list.append(robot_distance_list)
 
 
-            if self.filter_type:
+            if self.threshold_type:
                 best_value_index = potc_list.index(max(potc_list))
 
-                if potc_list[best_value_index] < self.filter_value:
+                if potc_list[best_value_index] < self.threshold_value:
                     loop_control = True
 
             else:
                 best_value_index = system_reliability_list.index(max(system_reliability_list))
 
-                if system_reliability_list[best_value_index] < self.filter_value:
+                if system_reliability_list[best_value_index] < self.threshold_value:
                     loop_control = True
 
             self.system_main_dict[str(process_count)]["POTC"] = potc_list[best_value_index]
