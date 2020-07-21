@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'potc_gui_v_3.ui'
+# Form implementation generated from reading ui file 'potc_gui_v_4.ui'
 #
 # Created by: PyQt5 UI code generator 5.11.3
 #
@@ -22,7 +22,7 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.groupBox_selection_analysis = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox_selection_analysis.setGeometry(QtCore.QRect(20, 20, 600, 331))
+        self.groupBox_selection_analysis.setGeometry(QtCore.QRect(20, 20, 570, 330))
         font = QtGui.QFont()
         font.setPointSize(15)
         self.groupBox_selection_analysis.setFont(font)
@@ -106,6 +106,12 @@ class Ui_MainWindow(object):
         self.label_11.setFont(font)
         self.label_11.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_11.setObjectName("label_11")
+        self.checkBox_load_data = QtWidgets.QCheckBox(self.groupBox_selection_analysis)
+        self.checkBox_load_data.setGeometry(QtCore.QRect(450, 100, 120, 35))
+        self.checkBox_load_data.setObjectName("checkBox_load_data")
+        self.checkBox_select_threshold_type = QtWidgets.QCheckBox(self.groupBox_selection_analysis)
+        self.checkBox_select_threshold_type.setGeometry(QtCore.QRect(450, 150, 120, 35))
+        self.checkBox_select_threshold_type.setObjectName("checkBox_select_threshold_type")
         self.plainTextEdit_result_view = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.plainTextEdit_result_view.setGeometry(QtCore.QRect(620, 35, 300, 500))
         self.plainTextEdit_result_view.setReadOnly(True)
@@ -119,7 +125,7 @@ class Ui_MainWindow(object):
         self.pushButton_start_analysis.setObjectName("pushButton_start_analysis")
         self.groupBox_robot_configuration = QtWidgets.QGroupBox(self.centralwidget)
         self.groupBox_robot_configuration.setEnabled(False)
-        self.groupBox_robot_configuration.setGeometry(QtCore.QRect(20, 400, 550, 271))
+        self.groupBox_robot_configuration.setGeometry(QtCore.QRect(20, 400, 570, 271))
         font = QtGui.QFont()
         font.setPointSize(15)
         self.groupBox_robot_configuration.setFont(font)
@@ -212,6 +218,8 @@ class Ui_MainWindow(object):
         self.label_3.setText(_translate("MainWindow", "Use Load Data"))
         self.pushButton_set_robot_count.setText(_translate("MainWindow", "Set Count"))
         self.label_11.setText(_translate("MainWindow", "Set Robot Count"))
+        self.checkBox_load_data.setText(_translate("MainWindow", "Both"))
+        self.checkBox_select_threshold_type.setText(_translate("MainWindow", "Both"))
         self.pushButton_start_analysis.setText(_translate("MainWindow", "Start Analysis"))
         self.groupBox_robot_configuration.setTitle(_translate("MainWindow", "Robot Configuration"))
         self.label_12.setText(_translate("MainWindow", "Select Robot"))
