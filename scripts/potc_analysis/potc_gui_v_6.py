@@ -356,12 +356,15 @@ class POTC_Analysis(object):
 
             self.plainTextEdit_result_view.clear()
 
+            now = datetime.now()
+            dt_string = now.strftime("%Y_%m_%d_-_%H_%M_%S")
+
             if load_data_state and threshold_type_state:
 
-                potc_class_potc_loaded = CalculatePOTC(self.robot_count, self.robot_main_dict, self.initial_configuration_dict, self.distance_list, True, True, self.threshold_value, self.route_count, self.current_workspace)
-                potc_class_potc_unloaded = CalculatePOTC(self.robot_count, self.robot_main_dict, self.initial_configuration_dict, self.distance_list, False, True, self.threshold_value, self.route_count, self.current_workspace)
-                potc_class_reliability_loaded = CalculatePOTC(self.robot_count, self.robot_main_dict, self.initial_configuration_dict, self.distance_list, True, False, self.threshold_value, self.route_count, self.current_workspace)
-                potc_class_reliability_unloaded = CalculatePOTC(self.robot_count, self.robot_main_dict, self.initial_configuration_dict, self.distance_list, False, False, self.threshold_value, self.route_count, self.current_workspace)
+                potc_class_potc_loaded = CalculatePOTC(self.robot_count, self.robot_main_dict, self.initial_configuration_dict, self.distance_list, True, True, self.threshold_value, self.route_count, self.current_workspace, dt_string)
+                potc_class_potc_unloaded = CalculatePOTC(self.robot_count, self.robot_main_dict, self.initial_configuration_dict, self.distance_list, False, True, self.threshold_value, self.route_count, self.current_workspace, dt_string)
+                potc_class_reliability_loaded = CalculatePOTC(self.robot_count, self.robot_main_dict, self.initial_configuration_dict, self.distance_list, True, False, self.threshold_value, self.route_count, self.current_workspace, dt_string)
+                potc_class_reliability_unloaded = CalculatePOTC(self.robot_count, self.robot_main_dict, self.initial_configuration_dict, self.distance_list, False, False, self.threshold_value, self.route_count, self.current_workspace, dt_string)
 
                 process_potc_loaded = Process(target=potc_class_potc_loaded.calculate_main_potc_func)
                 process_potc_unloaded = Process(target=potc_class_potc_unloaded.calculate_main_potc_func)
@@ -391,8 +394,8 @@ class POTC_Analysis(object):
                 self.set_plain_text_edit_result_view_func(set_value)
 
             elif load_data_state:
-                potc_class_loaded = CalculatePOTC(self.robot_count, self.robot_main_dict, self.initial_configuration_dict, self.distance_list, True, self.threshold_type, self.threshold_value, self.route_count, self.current_workspace)
-                potc_class_unloaded = CalculatePOTC(self.robot_count, self.robot_main_dict, self.initial_configuration_dict, self.distance_list, False, self.threshold_type, self.threshold_value, self.route_count, self.current_workspace)
+                potc_class_loaded = CalculatePOTC(self.robot_count, self.robot_main_dict, self.initial_configuration_dict, self.distance_list, True, self.threshold_type, self.threshold_value, self.route_count, self.current_workspace, dt_string)
+                potc_class_unloaded = CalculatePOTC(self.robot_count, self.robot_main_dict, self.initial_configuration_dict, self.distance_list, False, self.threshold_type, self.threshold_value, self.route_count, self.current_workspace, dt_string)
 
                 process_loaded = Process(target=potc_class_loaded.calculate_main_potc_func)
                 process_unloaded = Process(target=potc_class_unloaded.calculate_main_potc_func)
@@ -410,8 +413,8 @@ class POTC_Analysis(object):
                 self.set_plain_text_edit_result_view_func(set_value)
 
             elif threshold_type_state:
-                potc_class_potc = CalculatePOTC(self.robot_count, self.robot_main_dict, self.initial_configuration_dict, self.distance_list, self.load_control, True, self.threshold_value, self.route_count, self.current_workspace)
-                potc_class_reliability = CalculatePOTC(self.robot_count, self.robot_main_dict, self.initial_configuration_dict, self.distance_list, self.load_control, False, self.threshold_value, self.route_count, self.current_workspace)
+                potc_class_potc = CalculatePOTC(self.robot_count, self.robot_main_dict, self.initial_configuration_dict, self.distance_list, self.load_control, True, self.threshold_value, self.route_count, self.current_workspace, dt_string)
+                potc_class_reliability = CalculatePOTC(self.robot_count, self.robot_main_dict, self.initial_configuration_dict, self.distance_list, self.load_control, False, self.threshold_value, self.route_count, self.current_workspace, dt_string)
 
                 process_potc = Process(target=potc_class_potc.calculate_main_potc_func)
                 process_reliability = Process(target=potc_class_reliability.calculate_main_potc_func)
@@ -429,7 +432,7 @@ class POTC_Analysis(object):
                 self.set_plain_text_edit_result_view_func(set_value)
 
             else:
-                potc_class = CalculatePOTC(self.robot_count, self.robot_main_dict, self.initial_configuration_dict, self.distance_list, self.load_control, self.threshold_type, self.threshold_value, self.route_count, self.current_workspace)
+                potc_class = CalculatePOTC(self.robot_count, self.robot_main_dict, self.initial_configuration_dict, self.distance_list, self.load_control, self.threshold_type, self.threshold_value, self.route_count, self.current_workspace, dt_string)
 
                 calculate_process = Process(target=potc_class.calculate_main_potc_func)
                 calculate_process.start()
@@ -734,7 +737,7 @@ class CalculatePOTC:
     """
         km / h
     """
-    def __init__(self, robot_count, robot_main_dict, initial_configuration_dict, distance_list, load_control, threshold_type, threshold_value, route_count, current_workspace):
+    def __init__(self, robot_count, robot_main_dict, initial_configuration_dict, distance_list, load_control, threshold_type, threshold_value, route_count, current_workspace, dt_string):
         self.robot_count = robot_count
         self.initial_configuration_dict = initial_configuration_dict
         self.robot_main_dict = robot_main_dict
@@ -744,7 +747,7 @@ class CalculatePOTC:
         self.threshold_value = threshold_value
 
         self.current_workspace = current_workspace
-
+        self.dt_string = dt_string
         self.filename = self.set_filename_func()
 
         if route_count == 0:
@@ -758,7 +761,7 @@ class CalculatePOTC:
         self.low_robot_reliability_index = -1
 
         self.distance_robot_reliability_value = 0.1         # Robot Reliability Tolerans Value
-        self.max_distance_count = 10                        # Low Reliability Robot Max Distance Count
+        self.max_distance_count = 8                         # Low Reliability Robot Max Distance Count
 
         self.write_data_list = list()
         self.selected_route_count_dict = dict()
@@ -836,9 +839,14 @@ class CalculatePOTC:
             writer.writerows(write_data_list)
 
 
+    def csv_add_route_count_func(self, route_count_list):
+        with open(str(self.current_workspace) + 'potc_analysis/params/route_count/route_count_file.csv','a') as csvFile:
+            writer = csv.writer(csvFile)
+            writer.writerows(route_count_list)
+
     def set_filename_func(self):
-        now = datetime.now()
-        dt_string = now.strftime("%Y_%m_%d_-_%H_%M_%S")
+        #now = datetime.now()
+        #dt_string = now.strftime("%Y_%m_%d_-_%H_%M_%S")
         threshold_name = ""
         load_name = ""
 
@@ -852,7 +860,7 @@ class CalculatePOTC:
         else:
             load_name = "unloaded"
 
-        file_name = str("potc_analysis_threshold_" + str(threshold_name) + "_" + str(load_name) + "_" + str(dt_string))
+        file_name = str("potc_analysis_threshold_" + str(threshold_name) + "_" + str(load_name) + "_" + str(self.dt_string))
 
         return file_name
 
@@ -975,6 +983,16 @@ class CalculatePOTC:
 
         return average_result
 
+    
+    def set_route_count_func(self):
+        route_count_list = list()
+
+        for key, value in self.selected_route_count_dict.items():
+            temp_array = [str(self.filename), key, value]
+            route_count_list.append(temp_array)
+
+        return route_count_list
+
 
     def get_low_robot_reliability_func(self):
         pre_robot_reliability_list = self.system_main_dict["Robot Reliability"]
@@ -1024,6 +1042,8 @@ class CalculatePOTC:
         reliability_value = self.system_main_dict["Robot Reliability"][current_robot_cnt]
         potc_value = float(1)
 
+        """
+        # Filtreli yer
         if self.low_robot_reliability_index == current_robot_cnt and len(mesafe_list) > self.max_distance_count:
             time_value = 0
             distance_value = 0
@@ -1048,8 +1068,26 @@ class CalculatePOTC:
                 reliability_value *= new_reliability
                 new_potc = float(self.probability_of_task_completion_formula(reliability_value, mesafe_list[item_count]))
                 potc_value *= new_potc
+        """
+        for item_count in range(len(mesafe_list)):
+            selected_robot_hazard_rate = float(self.initial_configuration_dict[str("robot_" + str(robot_cnt))]["Hazard Rate"])
+            selected_robot_nominal_capacity = float(self.initial_configuration_dict[str("robot_" + str(robot_cnt))]["Nominal Capacity"])
 
-            return potc_value, reliability_value, time_value, distance_value
+            if self.load_control:
+                p_value = self.robot_main_dict["Yuk"][str("robot_" + str(robot_cnt))][str(route_cnt)][item_count]
+                hazard_rate = self.failure_rate_calculation_using_operating_load_func(selected_robot_hazard_rate, p_value, selected_robot_nominal_capacity)
+
+            else:
+                hazard_rate = selected_robot_hazard_rate
+
+            time_value += zaman_list[item_count]
+            distance_value += mesafe_list[item_count]
+            new_reliability = self.reliability_exponential_func(zaman_list[item_count], hazard_rate)
+            reliability_value *= new_reliability
+            new_potc = float(self.probability_of_task_completion_formula(reliability_value, mesafe_list[item_count]))
+            potc_value *= new_potc
+
+        return potc_value, reliability_value, time_value, distance_value
 
 
     def calculate_robot_potc_and_reliability_func(self, process_count, route_cnt):
@@ -1156,9 +1194,11 @@ class CalculatePOTC:
             self.configuration_write_data_list_func(system_main_dict, process_count)
 
         print("\n\n\nDosya Yazma islemi Basari ile gerceklesti")
-
+        route_count_list = self.set_route_count_func()
+        self.csv_add_route_count_func(route_count_list)
 
 if __name__ == '__main__':
+    
     try:
     #rospy.init_node('start_potc_analysis')
 
@@ -1172,4 +1212,13 @@ if __name__ == '__main__':
 
     except Exception as err:
         print(err)
+
+    """
+    app = QtWidgets.QApplication(sys.argv)
+    MAIN_WINDOW = QtWidgets.QMainWindow()
+    POTC_Gui = POTC_Analysis()
+    POTC_Gui.setupUi(MAIN_WINDOW)
+    MAIN_WINDOW.show()
+    sys.exit(app.exec_())
+    """
 
