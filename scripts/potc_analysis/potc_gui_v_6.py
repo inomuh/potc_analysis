@@ -39,6 +39,13 @@ class POTC_Analysis(object):
 
         self.distance_filename = "distances"
 
+
+        """
+        # 3 Robot
+        self.route_load_filename = "1003_routeLoads"
+        self.route_set_filename = "1003_routeSet"
+        """
+
         """
         # 4 Robot
         self.route_load_filename = "1003_routeLoads_distance4"
@@ -1194,13 +1201,13 @@ class CalculatePOTC:
             self.configuration_write_data_list_func(system_main_dict, process_count)
 
         print("\n\n\nDosya Yazma islemi Basari ile gerceklesti")
+
         route_count_list = self.set_route_count_func()
         self.csv_add_route_count_func(route_count_list)
 
 if __name__ == '__main__':
-    
     try:
-    #rospy.init_node('start_potc_analysis')
+        #rospy.init_node('start_potc_analysis')
 
         app = QtWidgets.QApplication(sys.argv)
         MAIN_WINDOW = QtWidgets.QMainWindow()
